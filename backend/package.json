@@ -9,6 +9,7 @@
   },
   "author": "ilhamuh97",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.5",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.9.1",

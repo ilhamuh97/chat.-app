@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import User, { IUser } from '../models/user.model';
 import bcrypt from 'bcryptjs';
 import { generateToken, isValidEmail } from '../lib/utils';
+import { IGetUserAuthInfoRequest } from '../types/user';
+import cloudinary from '../lib/cloudinary';
 
 export const signup = async (req: Request, res: Response) => {
     try {
@@ -59,10 +61,87 @@ export const signup = async (req: Request, res: Response) => {
     }
 };
 
-export const login = (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
+    try {
+        // Ensure body is defined
+        if (!req.body) {
+            return res.status(400).json({ message: "Request body is missing." });
+        }
+
+        // Destructure safely
+        const { email, password } = req.body as Partial<IUser>;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: "Invalid email or password." });
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(password || "", user.password);
+        if (!isPasswordCorrect) {
+            return res.status(400).json({ message: "Invalid email or password." });
+        }
+
+        generateToken(user._id, res);
+        res.status(200).json({
+            message: "Login successful.", data: {
+                _id: user._id,
+                fullName: user.fullName,
+                email: user.email,
+                profilePicture: user.profilePicture,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt
+            }
+        });
+
+    } catch (error) {
+        console.error("Error in login controller:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+
     res.send("Login route");
 };
 
 export const logout = (req: Request, res: Response) => {
+    try {
+        res.cookie("jwt", "", { maxAge: 0 });
+        res.status(200).json({ message: "Logout successful." });
+    } catch (error) {
+        console.error("Error in logout controller:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
     res.send("Logout route");
 };
+
+export const updateProfile = async (req: Request, res: Response) => {
+    try {
+        const { profilePicture } = req.body;
+        const userId = (req as IGetUserAuthInfoRequest).user._id
+
+        if (!profilePicture) {
+            return res.status(400).json({ message: "Profile picture is required." });
+        }
+
+        const uploadResponse = await cloudinary.uploader.upload(profilePicture);
+
+        if (uploadResponse.error) {
+            return res.status(500).json({ message: "Error uploading image." });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, { profilePicture: uploadResponse.secure_url }, { new: true });
+        res.status(200).json({ message: "Profile updated successfully.", data: updatedUser });
+
+    } catch (error) {
+        console.error("Error in logout controller:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+    res.send("Logout route");
+};
+
+export const checkAuth = async (req: Request, res: Response) => {
+    try {
+        const user = (req as IGetUserAuthInfoRequest).user;
+        res.status(200).json({ message: "User is authenticated.", data: user });
+    } catch (error) {
+        console.error("Error in checkAuth controller:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+}
