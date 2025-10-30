@@ -16,7 +16,6 @@ const userSchema = new Schema<IUser>(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true, minLength: 6 },
         profilePicture: { type: String, default: "" },
-        createdAt: { type: Date, default: Date.now }
     },
     { timestamps: true }
 );
