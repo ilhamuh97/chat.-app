@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import { Loader } from "lucide-react"
 
 import type { IUser } from "./types/user";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore() as {
@@ -35,6 +36,8 @@ const App = () => {
     );
   }
 
+  console.log("Auth User:", authUser);
+
   return (
     <div>
       <Navbar />
@@ -45,6 +48,7 @@ const App = () => {
         <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
+      <Toaster />
     </div>
   )
 }

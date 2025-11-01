@@ -96,8 +96,6 @@ export const login = async (req: Request, res: Response) => {
         console.error("Error in login controller:", error);
         res.status(500).json({ message: "Internal server error." });
     }
-
-    res.send("Login route");
 };
 
 export const logout = (req: Request, res: Response) => {
@@ -108,7 +106,6 @@ export const logout = (req: Request, res: Response) => {
         console.error("Error in logout controller:", error);
         res.status(500).json({ message: "Internal server error." });
     }
-    res.send("Logout route");
 };
 
 export const updateProfile = async (req: Request, res: Response) => {
@@ -133,7 +130,6 @@ export const updateProfile = async (req: Request, res: Response) => {
         console.error("Error in logout controller:", error);
         res.status(500).json({ message: "Internal server error." });
     }
-    res.send("Logout route");
 };
 
 export const checkAuth = async (req: Request, res: Response) => {
