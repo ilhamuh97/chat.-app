@@ -4,7 +4,9 @@ export interface IMessage extends mongoose.Document {
     sender: mongoose.Types.ObjectId;
     recipient: mongoose.Types.ObjectId;
     content: string;
-    timestamp: Date;
+    imageUrl?: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 const messageSchema = new mongoose.Schema({

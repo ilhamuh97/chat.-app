@@ -1,4 +1,4 @@
-import { Settings, User, LogOut } from "lucide-react";
+import { Settings, User, LogOut, UserIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { useAuthStore, type AuthState } from "../store/useAuthStore";
@@ -35,10 +35,18 @@ const Navbar = () => {
                     <div className="dropdown dropdown-end">
                         <label
                             tabIndex={0}
-                            className="btn btn-ghost btn-circle avatar placeholder"
+                            className="btn btn-ghost btn-circle avatar"
                         >
-                            <div className="bg-primary text-primary-content rounded-full w-8 flex items-center justify-center font-semibold">
-                                {authUser.fullName.charAt(0).toUpperCase()}
+                            <div className="w-8 h-8 rounded-full overflow-hidden bg-base-200 flex items-center justify-center">
+                                {authUser.profilePicture ? (
+                                    <img
+                                        src={authUser.profilePicture}
+                                        alt="Profile"
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <UserIcon className="text-base-content/70 size-5" />
+                                )}
                             </div>
                         </label>
 

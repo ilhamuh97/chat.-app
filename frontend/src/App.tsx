@@ -34,8 +34,6 @@ const App = () => {
     );
   }
 
-  console.log("Auth User:", theme);
-
   return (
     <div data-theme={theme} className="min-h-screen bg-base-100 text-base-content">
       <Navbar />

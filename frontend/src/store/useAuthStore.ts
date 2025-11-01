@@ -1,7 +1,8 @@
 import { create } from 'zustand';
-import { axiosInstance } from '../lib/axios';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+
+import { axiosInstance } from '../lib/axios';
 import type { SignUpFormData } from '../pages/SignUpPage';
 import type { ILoginData } from '../pages/LoginPage';
 import type { IUser } from '../types/user';
@@ -30,7 +31,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     checkAuth: async () => {
         try {
             const res = await axiosInstance.get('/auth/check', { withCredentials: true });
-            set({ authUser: res.data.data, isCheckingAuth: false });
+            set({ authUser: res.data.data });
         } catch (error) {
             set({ authUser: null });
             console.error("Error in checkAuth:", error);

@@ -19,7 +19,7 @@ app.use(cors({
 }));
 
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/message", messageRoutes);
+app.use("/api/v1/messages", messageRoutes);
 
 const PORT = process.env.PORT || 5001;
 
