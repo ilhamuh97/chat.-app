@@ -1,14 +1,11 @@
-import { useAuthStore } from "../store/useAuthStore";
-import type { IUser } from "../types/user";
 import { useState, useEffect } from "react";
+
 import { Camera, User, Mail, UserIcon } from "lucide-react";
 
+import { useAuthStore, type AuthState } from "../store/useAuthStore";
+
 const ProfilePage = () => {
-    const { authUser, updateProfile } = useAuthStore() as {
-        authUser: IUser | null;
-        isUpdatingProfile: boolean;
-        updateProfile: (formData: Partial<IUser>) => Promise<void>;
-    };
+    const { authUser, updateProfile } = useAuthStore() as AuthState
 
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [formData, setFormData] = useState<{ fullName: string; email: string }>({

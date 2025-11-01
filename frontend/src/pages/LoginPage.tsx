@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore, type AuthState } from "../store/useAuthStore";
 
 
 export type ILoginData = {
@@ -13,10 +13,7 @@ export type ILoginData = {
 }
 
 const LoginPage = () => {
-    const { login, isLoggingIn } = useAuthStore() as {
-        login: (credentials: ILoginData) => Promise<void>;
-        isLoggingIn: boolean;
-    };
+    const { login, isLoggingIn } = useAuthStore() as AuthState;
 
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");

@@ -6,8 +6,21 @@ import type { SignUpFormData } from '../pages/SignUpPage';
 import type { ILoginData } from '../pages/LoginPage';
 import type { IUser } from '../types/user';
 
+export interface AuthState {
+    authUser: IUser | null;
+    isSigningUp: boolean;
+    isLoggingIn: boolean;
+    isUpdatingProfile: boolean;
+    isCheckingAuth: boolean;
 
-export const useAuthStore = create((set) => ({
+    checkAuth: () => Promise<void>;
+    signUp: (formData: SignUpFormData) => Promise<void>;
+    login: (credentials: ILoginData) => Promise<void>;
+    logout: () => Promise<void>;
+    updateProfile: (updatedData: Partial<IUser>) => Promise<void>;
+}
+
+export const useAuthStore = create<AuthState>((set) => ({
     authUser: null,
     isSigningUp: false,
     isLoggingIn: false,

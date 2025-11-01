@@ -1,28 +1,26 @@
 
+
+import { useEffect } from "react";
+
+import { Loader } from "lucide-react"
+import { Toaster } from "react-hot-toast";
 import { Navigate, Route, Routes } from "react-router-dom";
-
+// Components
 import Navbar from "./components/Navbar";
-
+// Pages
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import SettingsPage from "./pages/SettingsPage";
-
-import { useAuthStore } from "./store/useAuthStore";
-import { useEffect } from "react";
-
-import { Loader } from "lucide-react"
-
-import type { IUser } from "./types/user";
-import { Toaster } from "react-hot-toast";
+// Store
+import { useAuthStore, type AuthState } from "./store/useAuthStore";
+import { useThemeStore } from "./store/useThemeStore";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth } = useAuthStore() as {
-    authUser: IUser | null;
-    checkAuth: () => Promise<void>;
-    isCheckingAuth: boolean;
-  };
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore() as AuthState
+
+  const { theme } = useThemeStore();
 
   useEffect(() => {
     checkAuth();
@@ -36,10 +34,10 @@ const App = () => {
     );
   }
 
-  console.log("Auth User:", authUser);
+  console.log("Auth User:", theme);
 
   return (
-    <div>
+    <div data-theme={theme} className="min-h-screen bg-base-100 text-base-content">
       <Navbar />
       <Routes>
         <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />

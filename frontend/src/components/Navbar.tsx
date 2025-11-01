@@ -1,28 +1,10 @@
-import { useEffect, useState } from "react";
-
-import { Sun, Moon, User, LogOut } from "lucide-react";
+import { Settings, User, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import { useAuthStore } from "../store/useAuthStore";
-import type { IUser } from "../types/user";
+import { useAuthStore, type AuthState } from "../store/useAuthStore";
 
 const Navbar = () => {
-    const { authUser, logout } = useAuthStore() as {
-        authUser: IUser | null;
-        logout: () => Promise<void>;
-    };
-
-    // Theme management
-    const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-
-    useEffect(() => {
-        document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
-    }, [theme]);
-
-    const toggleTheme = () => {
-        setTheme((prev) => (prev === "light" ? "dark" : "light"));
-    };
+    const { authUser, logout } = useAuthStore() as AuthState
 
     return (
         <nav className="navbar bg-base-100 border-b border-base-200 shadow-sm px-6">
@@ -41,17 +23,13 @@ const Navbar = () => {
 
             {/* Right side */}
             <div className="flex items-center gap-4">
-                <button
-                    onClick={toggleTheme}
-                    className="btn btn-ghost btn-circle"
-                    aria-label="Toggle Theme"
+                <Link
+                    to="/settings"
+                    className="btn btn-ghost flex items-center gap-2"
                 >
-                    {theme === "light" ? (
-                        <Moon className="size-5" />
-                    ) : (
-                        <Sun className="size-5" />
-                    )}
-                </button>
+                    <Settings className="size-4" />
+                    Settings
+                </Link>
 
                 {authUser && (
                     <div className="dropdown dropdown-end">
