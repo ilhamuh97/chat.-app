@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import type { SignUpFormData } from '../pages/SignUpPage';
 import type { ILoginData } from '../pages/LoginPage';
+import type { IUser } from '../types/user';
 
 
 export const useAuthStore = create((set) => ({
@@ -74,5 +75,19 @@ export const useAuthStore = create((set) => ({
             toast.error("Logout failed. Please try again.");
             console.error("Logout failed:", error);
         }
-    }
+    },
+
+    updateProfile: async (updatedData: Partial<IUser>) => {
+        set({ isUpdatingProfile: true });
+        try {
+            const res = await axiosInstance.put('/auth/update-profile', updatedData);
+            set({ authUser: res.data.data });
+            toast.success("Profile updated successfully.");
+        } catch (error) {
+            toast.error("Profile update failed. Please try again.");
+            console.error("Profile update failed:", error);
+        } finally {
+            set({ isUpdatingProfile: false });
+        }
+    },
 }));
