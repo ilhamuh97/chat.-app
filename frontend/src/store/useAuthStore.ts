@@ -26,6 +26,8 @@ export interface AuthState {
     disconnectSocket: () => void;
 }
 
+const API_URL = import.meta.env.MODE === "development" ? import.meta.env.VITE_API_BASE_URL_V1 || "http://localhost:5001/api/v1" : "/api/v1";
+
 export const useAuthStore = create<AuthState>((set, get) => ({
     authUser: null,
     isSigningUp: false,
@@ -121,7 +123,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
         if (!authUser || get().socket?.connected) return;
 
-        const socket = io(import.meta.env.VITE_API_BASE_URL, {
+        const socket = io(API_URL, {
             query: { userId: authUser._id },
         });
 
