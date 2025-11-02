@@ -15,16 +15,6 @@ import "./lib/resetDataBase"; // Import to initialize the reset job
 
 import path from "path";
 
-if (process.env.NODE_ENV === "production") {
-    const clientPath = path.join(__dirname, "client");
-    app.use(express.static(clientPath));
-
-    app.get(/.*/, (req, res) => {
-        res.sendFile(path.join(clientPath, "index.html"));
-    });
-}
-
-
 app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
 app.use(
@@ -36,6 +26,15 @@ app.use(
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/messages", messageRoutes);
+
+if (process.env.NODE_ENV === "production") {
+    const clientPath = path.join(__dirname, "client");
+    app.use(express.static(clientPath));
+
+    app.get(/.*/, (req, res) => {
+        res.sendFile(path.join(clientPath, "index.html"));
+    });
+}
 
 const PORT = process.env.PORT || 5001;
 

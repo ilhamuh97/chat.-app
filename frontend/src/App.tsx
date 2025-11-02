@@ -18,9 +18,7 @@ import { useAuthStore, type AuthState } from "./store/useAuthStore";
 import { useThemeStore } from "./store/useThemeStore";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore() as AuthState
-
-  console.log("Online users:", onlineUsers);
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore() as AuthState
 
   const { theme } = useThemeStore();
 

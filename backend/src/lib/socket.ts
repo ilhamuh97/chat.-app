@@ -7,8 +7,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: process.env.CLIENT_URL,
-        methods: ["GET", "POST"],
+        origin: [process.env.CLIENT_URL || "http://localhost:5173"],
     },
 });
 
@@ -21,7 +20,7 @@ const userSocketMap: Map<string, string> = new Map(); //userId -> socketId
 
 io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId as string;
-
+    console.log("User connected with ID:", userId);
     if (userId) {
         userSocketMap.set(userId, socket.id);
     }
