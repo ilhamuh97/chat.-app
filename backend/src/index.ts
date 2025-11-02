@@ -15,13 +15,11 @@ import "./lib/resetDataBase"; // Import to initialize the reset job
 
 import path from "path";
 
-// Serve frontend build
 if (process.env.NODE_ENV === "production") {
     const clientPath = path.join(__dirname, "client");
     app.use(express.static(clientPath));
 
-    // React Router fallback (Express 5-safe)
-    app.get("/:path(*)", (req, res) => {
+    app.get(/.*/, (req, res) => {
         res.sendFile(path.join(clientPath, "index.html"));
     });
 }
