@@ -1,8 +1,11 @@
-import express from "express";
 import dotenv from "dotenv";
-import connectDB from "./lib/db";
+dotenv.config();
+
+import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+
+import connectDB from "./lib/db";
 import authRoutes from "./routes/auth.route";
 import messageRoutes from "./routes/message.route";
 
@@ -12,20 +15,17 @@ import "./lib/resetDataBase"; // Import to initialize the reset job
 
 import path from "path";
 
-const __dirname = path.resolve();
-
 // Serve frontend build
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "dist/client")));
+    const clientPath = path.join(__dirname, "client");
+    app.use(express.static(clientPath));
 
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "dist/client", "index.html"));
+    // React Router fallback (Express 5-safe)
+    app.get("/:path(*)", (req, res) => {
+        res.sendFile(path.join(clientPath, "index.html"));
     });
 }
 
-
-
-dotenv.config();
 
 app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
