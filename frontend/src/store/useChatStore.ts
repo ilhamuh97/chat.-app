@@ -5,6 +5,7 @@ import { axiosInstance } from "../lib/axios";
 import type { IMessage } from "../types/message";
 import type { IUser } from "../types/user";
 import axios from "axios";
+import { useAuthStore } from "./useAuthStore";
 
 export interface ChatState {
     messages: IMessage[];
@@ -17,6 +18,8 @@ export interface ChatState {
     getMessages: (userId: string) => Promise<void>;
     sendMessage: (messageData: { text: string; image: string | null }) => Promise<void>;
     setSelectedUser: (user: IUser | null) => void;
+    subscribeToMessages: () => void;
+    unsubscribeFromMessages: () => void;
 }
 
 const useChatStore = create<ChatState>()((set, get) => ({
@@ -65,6 +68,22 @@ const useChatStore = create<ChatState>()((set, get) => ({
             console.error("Error sending message:", error);
             toast.error("Failed to send message.");
         }
+    },
+    subscribeToMessages: () => {
+        const { selectedUser } = get();
+        if (!selectedUser) return;
+
+        const socket = useAuthStore.getState().socket;
+        socket?.on("newMessage", (message: IMessage) => {
+            const isMessageSentFromSelectedUser = message.sender === selectedUser._id || message.recipient === selectedUser._id;
+            if (!isMessageSentFromSelectedUser) return;
+
+            set({ messages: [...get().messages, message] });
+        });
+    },
+    unsubscribeFromMessages: () => {
+        const socket = useAuthStore.getState().socket;
+        socket?.off("newMessage");
     },
     setSelectedUser: (selectedUser: IUser | null) => {
         set({ selectedUser });

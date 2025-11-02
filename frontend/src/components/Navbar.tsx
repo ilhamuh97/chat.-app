@@ -2,6 +2,7 @@ import { Settings, User, LogOut, UserIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { useAuthStore, type AuthState } from "../store/useAuthStore";
+import LogoBubble from "./LogoBubble";
 
 const Navbar = () => {
     const { authUser, logout } = useAuthStore() as AuthState
@@ -12,15 +13,12 @@ const Navbar = () => {
             <div className="flex-1">
                 <Link
                     to="/"
-                    className="flex items-center gap-2 text-xl font-bold text-primary"
+                    className="flex items-center gap-2 text-xl font-bold text-primary w-fit"
                 >
-                    <div className="w-8 h-8 rounded-lg bg-primary text-primary-content flex items-center justify-center font-semibold">
-                        C
-                    </div>
+                    <LogoBubble />
                     <span>Chatify</span>
                 </Link>
             </div>
-
             {/* Right side */}
             <div className="flex items-center gap-4">
                 <Link

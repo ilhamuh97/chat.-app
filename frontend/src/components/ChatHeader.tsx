@@ -3,6 +3,7 @@ import React from "react";
 import { User as UserIcon, X } from "lucide-react";
 
 import type { IUser } from "../types/user";
+import { useAuthStore, type AuthState } from "../store/useAuthStore";
 
 interface ChatHeaderProps {
     selectedUser: IUser;
@@ -10,6 +11,8 @@ interface ChatHeaderProps {
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedUser, onClose }) => {
+    const { onlineUsers } = useAuthStore() as AuthState;
+
     return (
         <div className="px-4 py-3 border-b border-base-300 flex items-center gap-3 bg-base-100/5">
             <div className="w-9 h-9 rounded-full bg-base-300 flex items-center justify-center overflow-hidden">
@@ -27,7 +30,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedUser, onClose }) => {
                 <h2 className="text-sm font-medium text-base-content">
                     {selectedUser?.fullName}
                 </h2>
-                <p className="text-xs text-base-content/50">Online</p>
+                <p className="text-xs text-base-content/50">{onlineUsers.includes(selectedUser?._id) ? "Online" : ""}</p>
             </div>
             <div className="flex-1" />
             <button

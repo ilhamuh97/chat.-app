@@ -3,6 +3,7 @@ import User from '../models/user.model';
 import Message from '../models/message.model';
 import { IGetUserAuthInfoRequest } from '../types/user';
 import cloudinary from '../lib/cloudinary';
+import { getReceiverSocketId, io } from '../lib/socket';
 
 export const getUsersForSidebar = async (req: Request, res: Response) => {
     try {
@@ -61,6 +62,13 @@ export const sendMessage = async (req: Request, res: Response) => {
         });
 
         await newMessage.save();
+
+        // Realtime notification via Socket
+        const receiverSocketId = getReceiverSocketId(recipientId);
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("newMessage", newMessage);
+        }
+
         res.status(201).json({ message: "Message sent successfully.", data: newMessage });
     } catch (error) {
         console.error("Error sending message:", error);

@@ -13,7 +13,7 @@ const Messages = () => {
     const bottomRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        if (bottomRef.current) {
+        if (bottomRef.current && messages) {
             bottomRef.current.scrollIntoView({ behavior: "smooth" });
         }
     }, [messages]);
@@ -38,6 +38,7 @@ const Messages = () => {
                     <div
                         key={msg._id}
                         className={`chat ${isSender ? "chat-end" : "chat-start"}`}
+                        ref={bottomRef}
                     >
                         {/* Avatar */}
                         <div className="chat-image avatar">
@@ -68,7 +69,7 @@ const Messages = () => {
                         </div>
 
                         {/* Message bubble */}
-                        <div className="chat-bubble flex flex-col gap-2">
+                        <div className={`${isSender ? "chat-bubble chat-bubble-primary" : "chat-bubble chat-bubble-secondary"} flex flex-col gap-2`}>
 
                             {msg.imageUrl && (
                                 <a
@@ -97,7 +98,6 @@ const Messages = () => {
                     </div>
                 );
             })}
-            <div ref={bottomRef} />
         </div>
     );
 };

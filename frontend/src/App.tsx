@@ -1,7 +1,7 @@
 
 
 import { useEffect } from "react";
-
+// Libraries
 import { Loader } from "lucide-react"
 import { Toaster } from "react-hot-toast";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -18,7 +18,9 @@ import { useAuthStore, type AuthState } from "./store/useAuthStore";
 import { useThemeStore } from "./store/useThemeStore";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth } = useAuthStore() as AuthState
+  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore() as AuthState
+
+  console.log("Online users:", onlineUsers);
 
   const { theme } = useThemeStore();
 

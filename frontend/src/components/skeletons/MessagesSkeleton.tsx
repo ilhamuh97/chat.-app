@@ -1,18 +1,38 @@
+import { User as UserIcon } from "lucide-react";
+
 const MessagesSkeleton = () => {
+    const fakeMessages = Array.from({ length: 6 }); // simulate few bubbles
+
     return (
-        <div className="flex flex-col h-full justify-center items-center gap-3 text-base-content/50">
-            <div className="animate-pulse space-y-4 w-2/3">
-                {[...Array(4)].map((_, i) => (
+        <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-base-200 animate-pulse">
+            {fakeMessages.map((_, i) => {
+                const isSender = i % 2 === 0;
+                return (
                     <div
                         key={i}
-                        className={`h-5 rounded-2xl ${i % 2 === 0
-                            ? "bg-base-300/60 w-1/2"
-                            : "bg-primary/30 w-2/3 self-end ml-auto"
-                            }`}
-                    ></div>
-                ))}
-            </div>
-            <p className="text-xs mt-6 animate-pulse">Loading messages...</p>
+                        className={`chat ${isSender ? "chat-end" : "chat-start"}`}
+                    >
+                        {/* Avatar */}
+                        <div className="chat-image avatar">
+                            <div className="w-10 h-10 rounded-full bg-base-300 flex items-center justify-center">
+                                <UserIcon className="w-5 h-5 text-base-content/40" />
+                            </div>
+                        </div>
+
+                        {/* Bubble */}
+                        <div
+                            className={`chat-bubble ${isSender ? "bg-primary/10" : "bg-base-300/60"
+                                } flex flex-col gap-2`}
+                        >
+                            {/* Random length message lines */}
+                            <div className="h-3 w-40 bg-base-300 rounded"></div>
+                            {i % 3 === 0 && (
+                                <div className="h-3 w-28 bg-base-300 rounded"></div>
+                            )}
+                        </div>
+                    </div>
+                );
+            })}
         </div>
     );
 };
